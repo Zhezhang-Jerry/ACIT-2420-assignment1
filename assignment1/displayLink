@@ -1,0 +1,22 @@
+#!/bin/bash
+while getopts "f:h:" opt; do
+  case "${opt}" in
+    f)
+      wget $2 # get the index.html from user url.
+      fileName=$3
+      if [[ $fileName == "" ]]; then
+        grep -Eoi '<a [^>]+>' index.html | grep -Eo 'href="[^\"]+"' | grep -Poi '(http|https)://[^/"]+' # display only
+      else 
+        grep -Eoi '<a [^>]+>' index.html | grep -Eo 'href="[^\"]+"' | grep -Poi '(http|https)://[^/"]+' >> $fileName  # save it to user input file.    
+      fi
+      ;;
+    h)
+      echo "If you want to save all urls into urlFile, please type -f and url.
+If you want to save all urls into your expected file, please type -f url and filename."
+      ;;
+    *)
+      echo "Error -${OPTARG} Incorrect input, please enter the correct information or type -h with the url to get more information"
+      exit 1
+      ;;
+      esac
+  done

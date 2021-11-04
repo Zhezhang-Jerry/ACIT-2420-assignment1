@@ -1,0 +1,65 @@
+#!/bin/bash
+dir="./contactInfo"
+nameInput=$2
+if [ ! -d "$dir" ]; then
+  mkdir $dir
+fi
+contactFile=$(find $dir -type f)
+
+getContact () {
+    echo "Please enter your name: "
+    read name
+    echo "Please enter your address: "
+    read address
+    echo "Please enter your phone number: "
+    read phoneNumber
+    echo "Please enter your email: "
+    read email
+    echo name: $name$'\n'address: $address$'\n'phone number: $phoneNumber$'\n'email: $email >> $dir/contactInfo$name 
+}
+
+removeContact () {
+    if [ ! -f $dir/contactInfo$nameInput ]; then
+      echo "this person not existed, please enter the correct name!"
+    else
+      rm $dir/contactInfo$nameInput
+      echo $nameInput "has been removed."
+    fi
+}
+
+displayContact () {
+    if [[ $1 == "" ]]; then
+        while read line; do
+            echo $line
+        done < $dir/contactInfo$nameInput
+    else
+        grep ^$1 < $dir/contactInfo$nameInput
+    fi 
+}
+while getopts "a:d:h:r:" opt; do
+  case "${opt}" in
+  a)
+    getContact
+  ;;
+  d)
+    if [[ $3 == "" ]]; then
+        displayContact
+    else
+        displayContact $3
+    fi
+  ;;
+  h)
+    echo "If you want to add your contact info, type -a with any letters,
+If you want to display contact info, type -d with the person name,
+If you want to display specific contact info, type -d, person name with the specific contact info, for example, '-d Jerry name',
+If you want to remove contact info, type -r with the person name."
+  ;;
+  r)
+    removeContact $2
+  ;;
+  *)
+    echo "Error -${OPTARG} Incorrect input, please enter the correct information or type -h with the url to get more information"
+    exit 1
+  ;;
+  esac
+ done

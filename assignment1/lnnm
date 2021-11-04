@@ -1,0 +1,29 @@
+#!/bin/bash
+index=1
+# use if statement when user only wants to read lines.
+if [ $# -eq 1 -a -f $1 ]; then
+  while read line; do
+      echo $line
+  done < $1
+fi
+
+# use getopts declare 2 option.
+while getopts "n:h:" opt; do
+  case "${opt}" in
+  n) # use index increment to show index before lines.
+    index=1
+    while read line; do
+        echo $index. $line
+        index=$((index+1))
+    done < "$OPTARG"
+    ;;
+  h)
+    echo "Please enter filename if you only want to read lines.
+Please enter -n with filename if you want to have index before lines."
+    ;;
+  *)
+    echo "Error -${OPTARG} Incorrect input, please enter -h with filename to get more information."
+    exit 1
+    ;;
+    esac
+  done
