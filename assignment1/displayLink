@@ -15,7 +15,7 @@ while getopts "f:h:" opt; do
 If you want to save all urls into your expected file, please type -f url and filename."
       ;;
     *)
-      echo "Error -${OPTARG} Incorrect input, please enter the correct information or type -h with the url to get more information"
+      echo "Error -${OPTARG} Incorrect input, please enter the correct information or type -h with any letter to get more information"
       exit 1
       ;;
       esac
